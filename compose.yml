@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  my-api:
+    build:
+      context: .
+    image: cool-api
+    ports: ["8080:8080"]
+
+  dynamo-db:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: amazon/dynamodb-local:latest
+    container_name: dynamo-db
+    ports: ["8000:8000"]
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+  app-node:
+    depends_on:
+      - dynamo-db
+    image: amazon/aws-cli
+    container_name: app-node
+    ports: ["8081:8080"]
+    environment:
+      AWS_ACCESS_KEY_ID: 'blank'
+      AWS_SECRET_ACCESS_KEY: 'blank'
+    command:
+      dynamodb describe-limits --endpoint-url http://dynamo-db:8000 --region us-west-2
+
+
