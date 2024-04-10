@@ -8,13 +8,12 @@ services:
     ports: ["8080:8080"]
 
   dynamo-db:
-    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    command: "-jar DynamoDBLocal.jar"
     image: amazon/dynamodb-local:latest
     container_name: dynamo-db
     ports: ["8000:8000"]
-    volumes:
-      - "./docker/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
+
   app-node:
     depends_on:
       - dynamo-db
@@ -25,6 +24,17 @@ services:
       AWS_ACCESS_KEY_ID: 'blank'
       AWS_SECRET_ACCESS_KEY: 'blank'
     command:
-      dynamodb describe-limits --endpoint-url http://dynamo-db:8000 --region us-west-2
-
+      "dynamodb create-table \
+        --table-name Music \
+        --attribute-definitions \
+          AttributeName=Artist,AttributeType=S \
+          AttributeName=SongTitle,AttributeType=S \
+        --key-schema \
+          AttributeName=Artist,KeyType=HASH \
+          AttributeName=SongTitle,KeyType=RANGE \
+        --provisioned-throughput \
+            ReadCapacityUnits=5,WriteCapacityUnits=5 \
+        --table-class STANDARD
+        --endpoint-url=http://dynamo-db:8000/
+        --region ap-northeast-2 || true | cat"
 

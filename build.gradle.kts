@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "co.vgw.chu.ref.arch"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -19,11 +19,14 @@ repositories {
 }
 
 dependencies {
+	implementation("aws.sdk.kotlin:dynamodb:1.0.30")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+	implementation("org.jetbrains.kotlinx", "kotlinx-serialization-core")
+	implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 }
