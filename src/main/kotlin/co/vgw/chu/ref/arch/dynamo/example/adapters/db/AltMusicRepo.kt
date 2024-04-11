@@ -6,4 +6,8 @@ class AltMusicRepo: MusicRepo {
     override suspend fun readArtist(artist: String): Boolean {
         return true
     }
+
+    override suspend fun insert(artist: String, song: String) {
+        TODO("Not yet implemented")
+    }
 }
