@@ -39,7 +39,7 @@ class ApplicationConfiguration {
 
         builder
             .withEndpointConfiguration(
-            AwsClientBuilder.EndpointConfiguration("http://dynamo-db:8000","ap-northeast-2")
+            AwsClientBuilder.EndpointConfiguration("http://dynamo-db:8000","localhost")
         )
             .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials("hello", "world")))
 
