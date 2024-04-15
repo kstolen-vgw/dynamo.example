@@ -4,7 +4,6 @@ import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import aws.sdk.kotlin.services.dynamodb.model.QueryRequest
 import aws.sdk.kotlin.services.dynamodb.model.TransactWriteItem
-import aws.sdk.kotlin.services.dynamodb.model.TransactWriteItemsRequest
 import aws.sdk.kotlin.services.dynamodb.transactWriteItems
 
 

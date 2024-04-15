@@ -1,13 +1,7 @@
 package co.vgw.chu.ref.arch.dynamo.example.adapters.http.controllers
 
-import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
-import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
-import aws.sdk.kotlin.services.dynamodb.model.GetItemRequest
-import aws.sdk.kotlin.services.dynamodb.model.ScanRequest
-import aws.smithy.kotlin.runtime.net.url.Url
 import co.vgw.chu.ref.arch.dynamo.example.adapters.db.MusicRepo
 import co.vgw.chu.ref.arch.dynamo.example.adapters.db.Song
-import kotlinx.coroutines.runBlocking
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
