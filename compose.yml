@@ -8,10 +8,13 @@ services:
     ports: ["8080:8080"]
 
   dynamo-db:
-    command: "-jar DynamoDBLocal.jar"
-    image: amazon/dynamodb-local:latest
-    container_name: dynamo-db
-    ports: ["8000:8000"]
+    image: amazon/dynamodb-local
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
 
   app-node:

@@ -19,9 +19,9 @@ repositories {
 }
 
 dependencies {
-	implementation("aws.sdk.kotlin:dynamodb:1.1.13")
-	implementation("com.amazonaws:aws-java-sdk-dynamodb:1.12.258")
-	implementation("io.github.boostchicken:spring-data-dynamodb:5.2.5")
+	implementation("aws.sdk.kotlin:dynamodb:1.1.16")
+	implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.12")
+
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")

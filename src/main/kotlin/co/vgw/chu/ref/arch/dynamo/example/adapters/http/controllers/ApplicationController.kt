@@ -1,6 +1,13 @@
 package co.vgw.chu.ref.arch.dynamo.example.adapters.http.controllers
 
+import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
+import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import aws.sdk.kotlin.services.dynamodb.model.GetItemRequest
+import aws.sdk.kotlin.services.dynamodb.model.ScanRequest
+import aws.smithy.kotlin.runtime.net.url.Url
 import co.vgw.chu.ref.arch.dynamo.example.adapters.db.MusicRepo
+import co.vgw.chu.ref.arch.dynamo.example.adapters.db.Song
+import kotlinx.coroutines.runBlocking
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,8 +27,8 @@ class ApplicationController(
     }
 
     @GetMapping("/find/artist/{name}")
-    suspend fun findArtist(@PathVariable name: String): ResponseEntity<Boolean> {
-       var artistFound = music.readArtist(name)
+    suspend fun findArtist(@PathVariable name: String): ResponseEntity<Song> {
+       var artistFound = music.readArtist(name) ?: return ResponseEntity.notFound().build()
 
         return ResponseEntity.ok(artistFound)
     }
