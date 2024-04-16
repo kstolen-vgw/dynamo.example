@@ -14,6 +14,10 @@ class InMemoryMusicRepo : MusicRepo {
         TODO("Not yet implemented")
     }
 
+    override suspend fun songsBeginningWith(input: String): List<Song> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insert(artist: String, song: String) {
         TODO("Not yet implemented")
     }

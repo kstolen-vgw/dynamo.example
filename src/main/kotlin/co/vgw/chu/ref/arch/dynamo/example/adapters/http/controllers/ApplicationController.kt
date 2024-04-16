@@ -34,6 +34,12 @@ class ApplicationController(
         return ResponseEntity.ok(song)
     }
 
+    @GetMapping("/find/song/begins-with/{name}")
+    suspend fun findSongBeginningWith(@PathVariable name: String): ResponseEntity<List<Song>> {
+        val songs = music.songsBeginningWith(name)
+        return ResponseEntity.ok(songs)
+    }
+
     @PostMapping("/artist/{artist}/{song}")
     suspend fun addArtist(@PathVariable artist: String, @PathVariable song: String): ResponseEntity<Boolean> {
         music.insert(artist, song)

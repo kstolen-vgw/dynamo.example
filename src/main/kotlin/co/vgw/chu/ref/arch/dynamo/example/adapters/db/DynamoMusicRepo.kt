@@ -3,6 +3,7 @@ package co.vgw.chu.ref.arch.dynamo.example.adapters.db
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import aws.sdk.kotlin.services.dynamodb.model.QueryRequest
+import aws.sdk.kotlin.services.dynamodb.model.ScanRequest
 import aws.sdk.kotlin.services.dynamodb.model.TransactWriteItem
 import aws.sdk.kotlin.services.dynamodb.transactWriteItems
 
@@ -36,6 +37,24 @@ class DynamoMusicRepo(private val dynamoDbClient: DynamoDbClient) : MusicRepo {
                 scanIndexForward = false
                 keyConditionExpression = "Artist = :name"
                 expressionAttributeValues = mapOf(":name" to AttributeValue.S(artist))
+            }
+        )
+
+        val items = result.items
+        if (items.isNullOrEmpty()) {
+            println("result is ${if (items == null) "null" else "empty"}")
+            return emptyList()
+        }
+
+        return items.map { AttributeValue.M(it).toSong() }
+    }
+
+    override suspend fun songsBeginningWith(input: String): List<Song> {
+        val result = dynamoDbClient.scan(
+            ScanRequest {
+                tableName = "Music"
+                filterExpression = "begins_with(SongTitle, :name)"
+                expressionAttributeValues = mapOf(":name" to AttributeValue.S(input))
             }
         )
 

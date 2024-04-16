@@ -10,5 +10,7 @@ interface MusicRepo {
     suspend fun findSong(artist: String, song: String): Song?
     suspend fun findSongs(artist: String): List<Song>
 
+    suspend fun songsBeginningWith(input: String): List<Song>
+
     suspend fun insert(artist: String, song: String): Unit
 }
