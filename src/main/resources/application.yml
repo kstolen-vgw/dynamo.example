@@ -1,0 +1,24 @@
+spring:
+  main:
+    banner-mode: "off"
+  application:
+    name: dynamo-example
+  webflux:
+    base-path: /dynamo
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
+      probes:
+        enabled: true
+
+dynamo-api:
+  enabled: true
+  database:
+    dynamo:
+      host: ${DYNAMO_DB_HOST:http://localhost:8000}
+      region: ${DYNAMO_REGION:localhost}
+      access-key: ${DYNAMO_DB_ACCESS_KEY:randomKey}
+      access-id: ${DYNAMO_DB_ACCESS_ID:randomKey}

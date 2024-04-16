@@ -6,23 +6,37 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.net.url.Url
 import co.vgw.chu.ref.arch.dynamo.example.adapters.db.DynamoMusicRepo
 import co.vgw.chu.ref.arch.dynamo.example.adapters.db.MusicRepo
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-
+data class DynamoDatabase(
+    val host: String,
+    val region: String,
+    val accessKey: String,
+    val accessId: String,
+)
+data class Databases(
+    val dynamo: DynamoDatabase
+)
 @Configuration
 class ApplicationConfiguration {
 
-    @Bean
-    fun musicRepo(): MusicRepo {
+    @ConfigurationProperties(prefix = "dynamo-api")
+    data class Properties(
+        val enabled: Boolean,
+        val database: Databases
+    )
 
+    @Bean
+    fun musicRepo(props: Properties): MusicRepo {
         val dynamoDbClient = DynamoDbClient {
-            region = "localhost"
-            endpointUrl = Url.parse("http://localhost:8000")
+            region = props.database.dynamo.region
+            endpointUrl = Url.parse(props.database.dynamo.host)
             credentialsProvider = StaticCredentialsProvider(
                 Credentials(
-                    accessKeyId = "Id",
-                    secretAccessKey = "key"
+                    accessKeyId = props.database.dynamo.accessId,
+                    secretAccessKey = props.database.dynamo.accessKey
                 )
             )
         }
