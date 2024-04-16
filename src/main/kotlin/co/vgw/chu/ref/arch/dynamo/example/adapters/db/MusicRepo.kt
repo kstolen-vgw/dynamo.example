@@ -6,7 +6,9 @@ data class Song(
 )
 
 interface MusicRepo {
-    suspend fun readArtist(artist: String): Song?
+
+    suspend fun findSong(artist: String, song: String): Song?
+    suspend fun findSongs(artist: String): List<Song>
 
     suspend fun insert(artist: String, song: String): Unit
 }

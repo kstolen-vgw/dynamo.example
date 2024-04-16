@@ -8,15 +8,15 @@ import aws.sdk.kotlin.services.dynamodb.transactWriteItems
 
 
 class DynamoMusicRepo(private val dynamoDbClient: DynamoDbClient) : MusicRepo {
-    override suspend fun readArtist(artist: String): Song? {
 
+    override suspend fun findSong(artist: String, song: String): Song? {
         val result = dynamoDbClient.query(
             QueryRequest {
                 tableName = "Music"
                 scanIndexForward = false
                 limit = 1
-                keyConditionExpression = "Artist = :name"
-                expressionAttributeValues = mapOf(":name" to AttributeValue.S(artist))
+                keyConditionExpression = "Artist = :artist AND SongTitle = :title"
+                expressionAttributeValues = mapOf(":artist" to AttributeValue.S(artist), ":title" to AttributeValue.S(song))
             }
         )
 
@@ -26,11 +26,26 @@ class DynamoMusicRepo(private val dynamoDbClient: DynamoDbClient) : MusicRepo {
             return null
         }
 
-        val song =  items[0].let { AttributeValue.M(it)}.toSong()
+        return items[0].let { AttributeValue.M(it).toSong() }
+    }
 
-        println(song)
+    override suspend fun findSongs(artist: String): List<Song> {
+        val result = dynamoDbClient.query(
+            QueryRequest {
+                tableName = "Music"
+                scanIndexForward = false
+                keyConditionExpression = "Artist = :name"
+                expressionAttributeValues = mapOf(":name" to AttributeValue.S(artist))
+            }
+        )
 
-        return song
+        val items = result.items
+        if (items.isNullOrEmpty()) {
+            println("result is ${if (items == null) "null" else "empty"}")
+            return emptyList()
+        }
+
+        return items.map { AttributeValue.M(it).toSong() }
     }
 
     private fun AttributeValue.toSong(): Song {

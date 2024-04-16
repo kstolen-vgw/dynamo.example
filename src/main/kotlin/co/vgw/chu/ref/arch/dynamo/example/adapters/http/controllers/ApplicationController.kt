@@ -21,10 +21,17 @@ class ApplicationController(
     }
 
     @GetMapping("/find/artist/{name}")
-    suspend fun findArtist(@PathVariable name: String): ResponseEntity<Song> {
-       var artistFound = music.readArtist(name) ?: return ResponseEntity.notFound().build()
+    suspend fun findArtist(@PathVariable name: String): ResponseEntity<List<Song>> {
+        val songs = music.findSongs(name)
+        return ResponseEntity.ok(songs)
+    }
 
-        return ResponseEntity.ok(artistFound)
+    @GetMapping("/find/artist/{artist}/{song}")
+    suspend fun findSong(@PathVariable artist: String, @PathVariable song: String): ResponseEntity<Song> {
+
+        val song = music.findSong(artist, song) ?: return ResponseEntity.notFound().build()
+
+        return ResponseEntity.ok(song)
     }
 
     @PostMapping("/artist/{artist}/{song}")
