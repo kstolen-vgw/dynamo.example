@@ -28,9 +28,7 @@ class ApplicationController(
 
     @GetMapping("/find/artist/{artist}/{song}")
     suspend fun findSong(@PathVariable artist: String, @PathVariable song: String): ResponseEntity<Song> {
-
         val song = music.findSong(artist, song) ?: return ResponseEntity.notFound().build()
-
         return ResponseEntity.ok(song)
     }
 
@@ -43,7 +41,6 @@ class ApplicationController(
     @PostMapping("/artist/{artist}/{song}")
     suspend fun addArtist(@PathVariable artist: String, @PathVariable song: String): ResponseEntity<Boolean> {
         music.insert(artist, song)
-
         return ResponseEntity.ok(true)
     }
 }

@@ -6,6 +6,35 @@ services:
       context: .
     image: cool-api
     ports: ["8080:8080"]
+    environment:
+      FLYWAY_ENABLED: true
+      DYNAMO_DB_HOST: http://dynamo-db:8000
+      DYNAMO_DB_REGION: localhost
+      DYNAMO_DB_ACCESS_KEY: mykey
+      DYNAMO_DB_ACCESS_ID: myid
+      POSTGRES_DB_HOST: db
+      POSTGRES_DB_PORT: 5432
+      POSTGRES_DB_DATABASE: postgres
+      POSTGRES_DB_USER: postgres
+      POSTGRES_DB_PASSWORD: postgres
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:14.5
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - transactions:/var/lib/porgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready --username postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
   dynamo-db:
     image: amazon/dynamodb-local
@@ -41,3 +70,7 @@ services:
         --endpoint-url=http://dynamo-db:8000/
         --region ap-northeast-2 || true | cat"
 
+
+volumes:
+  transactions:
+    driver: local

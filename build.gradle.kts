@@ -21,7 +21,13 @@ repositories {
 dependencies {
 	implementation("aws.sdk.kotlin:dynamodb:1.1.16")
 	implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.12")
+
 	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0")
+
+	implementation("org.springframework.data:spring-data-r2dbc")
+	implementation("org.flywaydb:flyway-core:9.22.2")
+	implementation("org.postgresql:postgresql:42.6.0")
+	implementation("org.postgresql:r2dbc-postgresql:1.0.2.RELEASE")
 
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

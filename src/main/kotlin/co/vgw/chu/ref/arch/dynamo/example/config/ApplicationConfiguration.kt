@@ -1,14 +1,12 @@
 package co.vgw.chu.ref.arch.dynamo.example.config
 
-import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.net.url.Url
-import co.vgw.chu.ref.arch.dynamo.example.adapters.db.DynamoMusicRepo
-import co.vgw.chu.ref.arch.dynamo.example.adapters.db.MusicRepo
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
+
+@ConfigurationProperties("dynamo-api")
+class ApplicationConfiguration(
+    val enabled: Boolean,
+    val database: Databases
+)
 
 data class DynamoDatabase(
     val host: String,
@@ -16,31 +14,15 @@ data class DynamoDatabase(
     val accessKey: String,
     val accessId: String,
 )
-data class Databases(
-    val dynamo: DynamoDatabase
+data class PostgresDatabase(
+    val host: String,
+    val port: Int,
+    val database: String,
+    val user: String,
+    val password: String,
 )
-@Configuration
-class ApplicationConfiguration {
+data class Databases(
+    val dynamo: DynamoDatabase,
+    val postgres: PostgresDatabase,
+)
 
-    @ConfigurationProperties(prefix = "dynamo-api")
-    data class Properties(
-        val enabled: Boolean,
-        val database: Databases
-    )
-
-    @Bean
-    fun musicRepo(props: Properties): MusicRepo {
-        val dynamoDbClient = DynamoDbClient {
-            region = props.database.dynamo.region
-            endpointUrl = Url.parse(props.database.dynamo.host)
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials(
-                    accessKeyId = props.database.dynamo.accessId,
-                    secretAccessKey = props.database.dynamo.accessKey
-                )
-            )
-        }
-
-        return DynamoMusicRepo(dynamoDbClient)
-    }
-}
